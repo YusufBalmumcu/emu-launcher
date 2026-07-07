@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface: #0b0d12;
+  --color-surface-raised: #12151d;
+  --color-surface-hover: #1a1e29;
+  --color-stroke: #232838;
+  --color-accent: #6d8dff;
+}
+
+html,
+body {
+  height: 100%;
+  background-color: var(--color-surface);
+  color: #e6e9f0;
+  font-family: "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+/* Native app feel: no text selection or drag ghosts on chrome elements */
+body {
+  user-select: none;
+  cursor: default;
+}
+
+input,
+textarea {
+  user-select: text;
+  cursor: text;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a3040;
+  border-radius: 5px;
+  border: 2px solid var(--color-surface);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3a4256;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
