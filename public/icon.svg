@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- EMU LAUNCHER icon — flat, red #BA5A5A / blue #86BCBD -->
+  <defs>
+    <clipPath id="tile">
+      <rect x="0" y="0" width="1024" height="1024" rx="224" ry="224"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#tile)">
+    <!-- diagonal split background -->
+    <rect x="0" y="0" width="1024" height="1024" fill="#86BCBD"/>
+    <polygon points="0,0 1024,0 0,1024" fill="#BA5A5A"/>
+
+    <g transform="translate(0,-90)">
+    <!-- flat drop shadow of gamepad -->
+    <g fill="#000000" opacity="0.16" transform="translate(0,26)">
+      <circle cx="292" cy="600" r="188"/>
+      <circle cx="732" cy="600" r="188"/>
+      <rect x="292" y="412" width="440" height="320"/>
+    </g>
+
+    <!-- gamepad body -->
+    <g fill="#FFFFFF">
+      <circle cx="292" cy="600" r="188"/>
+      <circle cx="732" cy="600" r="188"/>
+      <rect x="292" y="412" width="440" height="320"/>
+    </g>
+
+    <!-- E (blue), centered on left grip circle (292,600) -->
+    <g fill="#86BCBD" transform="translate(-79,8)">
+      <rect x="298" y="488" width="54" height="208" rx="16"/>
+      <rect x="298" y="488" width="146" height="54" rx="16"/>
+      <rect x="298" y="565" width="120" height="54" rx="16"/>
+      <rect x="298" y="642" width="146" height="54" rx="16"/>
+    </g>
+
+    <!-- L (red), centered on right grip circle (732,600) -->
+    <g fill="#BA5A5A" transform="translate(71,8)">
+      <rect x="588" y="488" width="54" height="208" rx="16"/>
+      <rect x="588" y="642" width="146" height="54" rx="16"/>
+    </g>
+
+    <!-- pixel heart, centered at (512,600) -->
+    <g fill="#BA5A5A">
+      <rect x="467" y="546" width="36" height="18"/>
+      <rect x="521" y="546" width="36" height="18"/>
+      <rect x="449" y="564" width="126" height="36"/>
+      <rect x="467" y="600" width="90" height="18"/>
+      <rect x="485" y="618" width="54" height="18"/>
+      <rect x="503" y="636" width="18" height="18"/>
+    </g>
+    </g>
+  </g>
+</svg>

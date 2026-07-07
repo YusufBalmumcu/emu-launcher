@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 480" width="1600" height="480">
+  <!-- EMU LAUNCHER horizontal logo -->
+  <defs>
+    <clipPath id="tile">
+      <rect x="0" y="0" width="1024" height="1024" rx="224" ry="224"/>
+    </clipPath>
+  </defs>
+
+  <!-- mark -->
+  <g transform="translate(40,40) scale(0.390625)">
+    <g clip-path="url(#tile)">
+      <rect x="0" y="0" width="1024" height="1024" fill="#86BCBD"/>
+      <polygon points="0,0 1024,0 0,1024" fill="#BA5A5A"/>
+      <g transform="translate(0,-90)">
+      <g fill="#000000" opacity="0.16" transform="translate(0,26)">
+        <circle cx="292" cy="600" r="188"/>
+        <circle cx="732" cy="600" r="188"/>
+        <rect x="292" y="412" width="440" height="320"/>
+      </g>
+      <g fill="#FFFFFF">
+        <circle cx="292" cy="600" r="188"/>
+        <circle cx="732" cy="600" r="188"/>
+        <rect x="292" y="412" width="440" height="320"/>
+      </g>
+      <g fill="#86BCBD" transform="translate(-79,8)">
+        <rect x="298" y="488" width="54" height="208" rx="16"/>
+        <rect x="298" y="488" width="146" height="54" rx="16"/>
+        <rect x="298" y="565" width="120" height="54" rx="16"/>
+        <rect x="298" y="642" width="146" height="54" rx="16"/>
+      </g>
+      <g fill="#BA5A5A" transform="translate(71,8)">
+        <rect x="588" y="488" width="54" height="208" rx="16"/>
+        <rect x="588" y="642" width="146" height="54" rx="16"/>
+      </g>
+
+      <!-- pixel heart, centered at (512,600) -->
+      <g fill="#BA5A5A">
+        <rect x="467" y="546" width="36" height="18"/>
+        <rect x="521" y="546" width="36" height="18"/>
+        <rect x="449" y="564" width="126" height="36"/>
+        <rect x="467" y="600" width="90" height="18"/>
+        <rect x="485" y="618" width="54" height="18"/>
+        <rect x="503" y="636" width="18" height="18"/>
+      </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- wordmark -->
+  <g font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" font-weight="bold">
+    <text x="500" y="232" font-size="170" letter-spacing="6" fill="#BA5A5A">EMU</text>
+    <text x="500" y="382" font-size="118" letter-spacing="22" fill="#86BCBD">LAUNCHER</text>
+  </g>
+</svg>

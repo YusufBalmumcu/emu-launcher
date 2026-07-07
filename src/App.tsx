@@ -5,6 +5,7 @@ import EmulatorCard from "./components/EmulatorCard";
 import EmulatorModal from "./components/EmulatorModal";
 import ScanReviewModal, { type DetectedEmulator } from "./components/ScanReviewModal";
 import { identifyEmulator } from "./systems";
+import logoUrl from "./assets/logo.svg";
 import type { Emulator } from "./types";
 
 interface Toast {
@@ -153,10 +154,8 @@ export default function App() {
     <div className="flex h-screen flex-col">
       {/* Üst çubuk */}
       <header className="flex shrink-0 items-center justify-between border-b border-stroke px-8 py-5">
-        <div className="flex items-baseline gap-3">
-          <h1 className="text-xl font-bold tracking-tight text-white">
-            Emu<span className="text-accent">Launcher</span>
-          </h1>
+        <div className="flex items-center gap-3">
+          <img src={logoUrl} alt="Emu Launcher" draggable={false} className="h-11 w-auto" />
           {emulators.length > 0 && (
             <span className="text-sm text-white/35">{emulators.length} emülatör</span>
           )}
