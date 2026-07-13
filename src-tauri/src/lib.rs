@@ -20,22 +20,23 @@ fn config_path(app: &tauri::AppHandle) -> Result<PathBuf, String> {
 }
 
 // The config is stored and returned as opaque JSON: the frontend owns the
-// emulator schema, so new fields (system id, artwork paths, game shortcuts…)
-// can be added without touching the backend.
+// schema (emulators, groups, settings…), so new fields can be added without
+// touching the backend. Returns whatever is on disk (may be the legacy bare
+// emulator array or the newer state object); the frontend migrates it.
 #[tauri::command]
-fn load_emulators(app: tauri::AppHandle) -> Result<Value, String> {
+fn load_data(app: tauri::AppHandle) -> Result<Value, String> {
     let path = config_path(&app)?;
     if !path.exists() {
-        return Ok(Value::Array(Vec::new()));
+        return Ok(Value::Null);
     }
     let raw = fs::read_to_string(&path).map_err(|e| format!("Config could not be read: {e}"))?;
     serde_json::from_str(&raw).map_err(|e| format!("Config file is corrupted: {e}"))
 }
 
 #[tauri::command]
-fn save_emulators(app: tauri::AppHandle, emulators: Value) -> Result<(), String> {
+fn save_data(app: tauri::AppHandle, data: Value) -> Result<(), String> {
     let path = config_path(&app)?;
-    let json = serde_json::to_string_pretty(&emulators)
+    let json = serde_json::to_string_pretty(&data)
         .map_err(|e| format!("Config could not be serialized: {e}"))?;
     // Write to a temp file first so a crash mid-write can't corrupt the config.
     let tmp = path.with_extension("json.tmp");
@@ -147,8 +148,8 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
         .invoke_handler(tauri::generate_handler![
-            load_emulators,
-            save_emulators,
+            load_data,
+            save_data,
             launch_emulator,
             scan_directory
         ])

@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
-import type { Emulator } from "./types";
+import type { AppState, Emulator } from "./types";
 
 export interface ExeEntry {
   path: string;
@@ -11,21 +11,46 @@ export interface ExeEntry {
 // Tauri dışında (salt tarayıcıda `npm run dev`) çalışırken UI geliştirmesi
 // yapılabilsin diye localStorage tabanlı bir yedek kullanılır.
 const isTauri = "__TAURI_INTERNALS__" in window;
-const BROWSER_KEY = "emu-launcher:emulators";
+const BROWSER_KEY = "emu-launcher:state";
+const STATE_VERSION = 2;
 
-export async function loadEmulators(): Promise<Emulator[]> {
-  if (!isTauri) {
-    return JSON.parse(localStorage.getItem(BROWSER_KEY) ?? "[]");
+const DEFAULT_STATE: AppState = {
+  emulators: [],
+  groups: [],
+  settings: { grouping: "flat", manualSort: false },
+};
+
+// Diskteki veriyi güvenli AppState'e çevirir. Eski sürümlerde dosya düz bir
+// Emulator dizisiydi; bu durumda otomatik olarak yeni şekle taşınır.
+function normalize(raw: unknown): AppState {
+  if (Array.isArray(raw)) {
+    return { ...DEFAULT_STATE, emulators: raw as Emulator[] };
   }
-  return invoke<Emulator[]>("load_emulators");
+  if (raw && typeof raw === "object") {
+    const o = raw as Partial<AppState>;
+    return {
+      emulators: Array.isArray(o.emulators) ? o.emulators : [],
+      groups: Array.isArray(o.groups) ? o.groups : [],
+      settings: { ...DEFAULT_STATE.settings, ...(o.settings ?? {}) },
+    };
+  }
+  return { ...DEFAULT_STATE };
 }
 
-export async function saveEmulators(emulators: Emulator[]): Promise<void> {
+export async function loadState(): Promise<AppState> {
   if (!isTauri) {
-    localStorage.setItem(BROWSER_KEY, JSON.stringify(emulators));
+    return normalize(JSON.parse(localStorage.getItem(BROWSER_KEY) ?? "null"));
+  }
+  return normalize(await invoke("load_data"));
+}
+
+export async function saveState(state: AppState): Promise<void> {
+  const data = { version: STATE_VERSION, ...state };
+  if (!isTauri) {
+    localStorage.setItem(BROWSER_KEY, JSON.stringify(data));
     return;
   }
-  return invoke("save_emulators", { emulators });
+  return invoke("save_data", { data });
 }
 
 export async function launchEmulator(exePath: string): Promise<void> {

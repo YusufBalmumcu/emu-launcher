@@ -7,6 +7,19 @@ interface Props {
   onLaunch: (emulator: Emulator) => void;
   onEdit: (emulator: Emulator) => void;
   onDelete: (emulator: Emulator) => void;
+  /** Verilirse kartta "gruba taşı" butonu görünür (özel grup düzeni). */
+  onGroup?: (emulator: Emulator) => void;
+  // Sürükle-bırak (native HTML5). Verilmezse kart sürüklenemez.
+  onDragStartCard?: (emulator: Emulator) => void;
+  onDragOverCard?: (emulator: Emulator) => void;
+  onDropCard?: (emulator: Emulator) => void;
+  onDragEndCard?: () => void;
+  /** Bu kart şu an sürükleniyor. */
+  dragging?: boolean;
+  /** Bırakınca bu kartın önüne eklenecek (hedef göstergesi). */
+  dropTarget?: boolean;
+  /** Üzerine gelince konsol rengini bildirir (uygulama arka planı için). */
+  onHover?: (color: string | null) => void;
 }
 
 // Sistemi bilinmeyen emülatörler için isimden deterministik gradyan.
@@ -50,13 +63,53 @@ function shade(hex: string, f: number): string {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-export default function EmulatorCard({ emulator, onLaunch, onEdit, onDelete }: Props) {
+export default function EmulatorCard({
+  emulator,
+  onLaunch,
+  onEdit,
+  onDelete,
+  onGroup,
+  onDragStartCard,
+  onDragOverCard,
+  onDropCard,
+  onDragEndCard,
+  dragging,
+  dropTarget,
+  onHover,
+}: Props) {
   const system = getSystem(emulator.systemId);
   const logo = resolveArtworkSync({ kind: "system-icon", systemId: emulator.systemId });
+  const sysColor = system?.color ?? "#6d8dff";
 
   return (
     <div
-      className="group relative flex flex-col overflow-hidden rounded-xl border border-stroke bg-surface-raised transition-all duration-200 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_8px_30px_rgba(109,141,255,0.15)]"
+      onMouseEnter={() => onHover?.(sysColor)}
+      draggable={!!onDragStartCard}
+      onDragStart={(e) => {
+        if (!onDragStartCard) return;
+        e.dataTransfer.effectAllowed = "move";
+        try {
+          e.dataTransfer.setData("text/plain", emulator.id);
+        } catch {
+          /* bazı tarayıcılar setData'yı kısıtlar; sorun değil */
+        }
+        onDragStartCard(emulator);
+      }}
+      onDragOver={(e) => {
+        if (!onDragOverCard) return;
+        e.preventDefault();
+        onDragOverCard(emulator);
+      }}
+      onDrop={(e) => {
+        if (!onDropCard) return;
+        e.preventDefault();
+        e.stopPropagation();
+        onDropCard(emulator);
+      }}
+      onDragEnd={() => onDragEndCard?.()}
+      className={`group relative flex flex-col overflow-hidden rounded-xl border bg-surface-raised transition-all duration-200 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_8px_30px_rgba(109,141,255,0.15)] ${
+        dropTarget ? "border-accent ring-2 ring-accent" : "border-stroke"
+      } ${dragging ? "opacity-40" : ""}`}
       onDoubleClick={() => onLaunch(emulator)}
       title={emulator.exePath}
     >
@@ -99,8 +152,23 @@ export default function EmulatorCard({ emulator, onLaunch, onEdit, onDelete }: P
           </span>
         </button>
 
-        {/* Düzenle / Sil */}
+        {/* Gruba taşı / Düzenle / Sil */}
         <div className="absolute right-2 top-2 flex gap-1.5 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+          {onGroup && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onGroup(emulator);
+              }}
+              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg bg-black/60 text-white/80 backdrop-blur-sm transition-colors hover:bg-black/80 hover:text-white"
+              aria-label="Gruba taşı"
+              title="Gruba taşı"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z" />
+              </svg>
+            </button>
+          )}
           <button
             onClick={(e) => {
               e.stopPropagation();

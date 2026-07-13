@@ -11,52 +11,95 @@ for (const [path, url] of Object.entries(logoModules)) {
   LOGOS[id] = url;
 }
 
+export type Brand = "Nintendo" | "Sony" | "Microsoft" | "Sega" | "Diğer";
+
+/** Marka bölümlerinin görünüm sırası. */
+export const BRAND_ORDER: Brand[] = ["Nintendo", "Sony", "Microsoft", "Sega", "Diğer"];
+
 export interface GameSystem {
   id: string;
   /** Tam ad — açılır listede ve erişilebilirlik metninde kullanılır. */
   name: string;
   /** Kapak arka planı için marka rengi. */
   color: string;
+  /** Konsol markası — marka gruplaması için. */
+  brand: Brand;
+  /** Yaklaşık çıkış yılı — marka içinde sıralama için. */
+  release: number;
 }
 
-// Sıra, açılır listede görünen sırayı belirler.
+// Marka + çıkış yılına göre sıralı. Bu sıra hem açılır listede hem de
+// varsayılan (elle sıralanmamış) düzende kullanılır.
 export const SYSTEMS: GameSystem[] = [
-  { id: "ps1", name: "PlayStation", color: "#2b6cb0" },
-  { id: "ps2", name: "PlayStation 2", color: "#1d3fa0" },
-  { id: "ps3", name: "PlayStation 3", color: "#2d3436" },
-  { id: "ps4", name: "PlayStation 4", color: "#0a4bd0" },
-  { id: "ps5", name: "PlayStation 5", color: "#1a1a2e" },
-  { id: "psp", name: "PlayStation Portable", color: "#20242b" },
-  { id: "psvita", name: "PlayStation Vita", color: "#1f6feb" },
-  { id: "switch", name: "Nintendo Switch", color: "#e60012" },
-  { id: "3ds", name: "Nintendo 3DS", color: "#d1232a" },
-  { id: "nds", name: "Nintendo DS", color: "#6b7075" },
-  { id: "gamecube", name: "Nintendo GameCube", color: "#5c4b9e" },
-  { id: "wii", name: "Nintendo Wii", color: "#0a9bd6" },
-  { id: "wiiu", name: "Nintendo Wii U", color: "#0aa3e0" },
-  { id: "n64", name: "Nintendo 64", color: "#0a9e46" },
-  { id: "snes", name: "Super Nintendo (SNES)", color: "#4c469b" },
-  { id: "nes", name: "Nintendo NES", color: "#b0121a" },
-  { id: "gb", name: "Game Boy", color: "#6d7b2e" },
-  { id: "gbc", name: "Game Boy Color", color: "#c0398f" },
-  { id: "gba", name: "Game Boy Advance", color: "#4b3fce" },
-  { id: "genesis", name: "Sega Genesis", color: "#17559e" },
-  { id: "megadrive", name: "Sega Mega Drive", color: "#1a1a1a" },
-  { id: "dreamcast", name: "Sega Dreamcast", color: "#d9640c" },
-  { id: "saturn", name: "Sega Saturn", color: "#26262b" },
-  { id: "mastersystem", name: "Sega Master System", color: "#b01018" },
-  { id: "gamegear", name: "Sega Game Gear", color: "#1f2429" },
-  { id: "xbox", name: "Xbox", color: "#107c10" },
-  { id: "xbox360", name: "Xbox 360", color: "#0e7a0e" },
-  { id: "arcade", name: "Arcade", color: "#c026d3" },
-  { id: "mame", name: "MAME (Arcade)", color: "#a21caf" },
-  { id: "multi", name: "RetroArch / Çok Sistemli", color: "#3f4756" },
+  // Nintendo
+  { id: "nes", name: "Nintendo NES", color: "#b0121a", brand: "Nintendo", release: 1983 },
+  { id: "gb", name: "Game Boy", color: "#6d7b2e", brand: "Nintendo", release: 1989 },
+  { id: "snes", name: "Super Nintendo (SNES)", color: "#4c469b", brand: "Nintendo", release: 1990 },
+  { id: "n64", name: "Nintendo 64", color: "#0a9e46", brand: "Nintendo", release: 1996 },
+  { id: "gbc", name: "Game Boy Color", color: "#c0398f", brand: "Nintendo", release: 1998 },
+  { id: "gba", name: "Game Boy Advance", color: "#4b3fce", brand: "Nintendo", release: 2001 },
+  { id: "gamecube", name: "Nintendo GameCube", color: "#5c4b9e", brand: "Nintendo", release: 2001 },
+  { id: "nds", name: "Nintendo DS", color: "#6b7075", brand: "Nintendo", release: 2004 },
+  { id: "wii", name: "Nintendo Wii", color: "#0a9bd6", brand: "Nintendo", release: 2006 },
+  { id: "3ds", name: "Nintendo 3DS", color: "#d1232a", brand: "Nintendo", release: 2011 },
+  { id: "wiiu", name: "Nintendo Wii U", color: "#0aa3e0", brand: "Nintendo", release: 2012 },
+  { id: "switch", name: "Nintendo Switch", color: "#e60012", brand: "Nintendo", release: 2017 },
+  // Sony
+  { id: "ps1", name: "PlayStation", color: "#2b6cb0", brand: "Sony", release: 1994 },
+  { id: "ps2", name: "PlayStation 2", color: "#1d3fa0", brand: "Sony", release: 2000 },
+  { id: "psp", name: "PlayStation Portable", color: "#20242b", brand: "Sony", release: 2004 },
+  { id: "ps3", name: "PlayStation 3", color: "#2d3436", brand: "Sony", release: 2006 },
+  { id: "psvita", name: "PlayStation Vita", color: "#1f6feb", brand: "Sony", release: 2011 },
+  { id: "ps4", name: "PlayStation 4", color: "#0a4bd0", brand: "Sony", release: 2013 },
+  { id: "ps5", name: "PlayStation 5", color: "#1a1a2e", brand: "Sony", release: 2020 },
+  // Microsoft
+  { id: "xbox", name: "Xbox", color: "#107c10", brand: "Microsoft", release: 2001 },
+  { id: "xbox360", name: "Xbox 360", color: "#0e7a0e", brand: "Microsoft", release: 2005 },
+  // Sega
+  { id: "mastersystem", name: "Sega Master System", color: "#b01018", brand: "Sega", release: 1985 },
+  { id: "genesis", name: "Sega Genesis", color: "#17559e", brand: "Sega", release: 1988 },
+  { id: "megadrive", name: "Sega Mega Drive", color: "#1a1a1a", brand: "Sega", release: 1988 },
+  { id: "gamegear", name: "Sega Game Gear", color: "#1f2429", brand: "Sega", release: 1990 },
+  { id: "saturn", name: "Sega Saturn", color: "#26262b", brand: "Sega", release: 1994 },
+  { id: "dreamcast", name: "Sega Dreamcast", color: "#d9640c", brand: "Sega", release: 1998 },
+  // Diğer
+  { id: "arcade", name: "Arcade", color: "#c026d3", brand: "Diğer", release: 9990 },
+  { id: "mame", name: "MAME (Arcade)", color: "#a21caf", brand: "Diğer", release: 9991 },
+  { id: "multi", name: "RetroArch / Çok Sistemli", color: "#3f4756", brand: "Diğer", release: 9999 },
 ];
 
 const SYSTEM_BY_ID = new Map(SYSTEMS.map((s) => [s.id, s]));
 
 export function getSystem(id: string | undefined): GameSystem | undefined {
   return id ? SYSTEM_BY_ID.get(id) : undefined;
+}
+
+/** Sistemi bilinmeyen emülatörler "Diğer" markasına düşer. */
+export function brandOf(systemId: string | undefined): Brand {
+  return getSystem(systemId)?.brand ?? "Diğer";
+}
+
+function brandRank(brand: Brand): number {
+  const i = BRAND_ORDER.indexOf(brand);
+  return i === -1 ? BRAND_ORDER.length : i;
+}
+
+/**
+ * Varsayılan sıralama karşılaştırıcısı: önce marka, sonra çıkış yılı, sonra ad.
+ * (ör. PS1 → PS2 → PS3; GameCube → 3DS → Switch)
+ */
+export function compareByBrandRelease(
+  a: { systemId?: string; name: string },
+  b: { systemId?: string; name: string },
+): number {
+  const sa = getSystem(a.systemId);
+  const sb = getSystem(b.systemId);
+  const br = brandRank(sa?.brand ?? "Diğer") - brandRank(sb?.brand ?? "Diğer");
+  if (br !== 0) return br;
+  const ra = sa?.release ?? 100000;
+  const rb = sb?.release ?? 100000;
+  if (ra !== rb) return ra - rb;
+  return a.name.localeCompare(b.name, "tr");
 }
 
 export function systemLogo(id: string | undefined): string | undefined {
